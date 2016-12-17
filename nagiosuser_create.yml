@@ -1,0 +1,18 @@
+---
+# this is the first example
+# it creats a user nagios
+- hosts: testservers
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+   username: nagios
+   password: $6$jtUZz9x8$ICKLeddnr3QEOduXWbl2Qi2BsZNIWadMOu8R5JCcXgCVYVPTHLLCW1ukM8tah544cfPtSPdrUB0Znm9R.ir0p1
+  tasks:
+  - name: Create user nagios
+    user:
+       name: "{{ username }}"
+       shell: /bin/bash
+       state: present
+       password: "{{ password }}"
+        
