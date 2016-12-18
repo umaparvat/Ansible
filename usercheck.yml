@@ -1,0 +1,15 @@
+---
+- hosts: "{{ var_host | default('all') }}"
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+   username: nagios
+  tasks:
+  - name: check for the existence of the user
+    shell: /usr/bin/getent passwd "{{ username }}"
+    register: user_check
+  - name:  create user if not exists
+    user: name = "{{ username }}" state = present
+    when: 'user_check.rc != 0'
+ 

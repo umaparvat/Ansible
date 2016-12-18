@@ -1,0 +1,9 @@
+---
+- hosts: "{{ var_host | default('testservers') }}"
+  become: yes
+  become_method: sudo
+  become_user: root
+  tasks:
+  - name: creation of nagios directory
+    file: path=/root/nagios state=directory mode=0755
+# this creates a directory on the target server. the top var_host variable can b# passed in command line. if that's not passed, it takes default value as testservers group which exists in /etc/ansible/hosts file
