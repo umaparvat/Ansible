@@ -1,0 +1,17 @@
+---
+- hosts: "{{ var_host | default('all') }}"
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: no
+  vars:
+   gName: nagcmd
+  tasks:
+  - name: check nagcmd group
+    shell: /usr/bin/getent group "{{ gName }}"
+    register: group_check 
+  - name: create nagcmd group
+    group: 
+     name: "{{ gName }}" 
+     state: present 
+    when: 'group_check.rc != 0'

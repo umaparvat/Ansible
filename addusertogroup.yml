@@ -1,0 +1,21 @@
+---
+- hosts: "{{ var_host | default('all') }}"
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+  - name: check nagcmd group exists
+    shell: /usr/bin/getent group nagcmd
+    register: nagcmd_check
+  - name: check for the apache user existence
+    shell: /usr/bin/getent passwd apache
+    register: apache_check
+
+  - name: check for nagios user exists
+    shell: /usr/bin/getent passwd nagios
+    register: nagios_check
+  - name: add nagios user to the group nagcmd
+    user: name = nagios groups = nagcmd
+    when: ' nagios_check.rc == 0 and nagcmd_check.rc == 0 '
+
+
