@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  user: ec2-user
+  connection: local
+  gather_facts: false
+  tasks:
+  - name: creation of ec2 instance
+    ec2:
+     key_name: docker-key 
+     instance_type: t2.micro
+     image: ami-cdbdd7a2
+     wait: yes
+     group: ngix_up
+     region: ap-south-1
+     instance_tags:
+        Name: database
+     state: present
+     aws_access_key: xxxx
+     aws_secret_key: yyyy
+     register: ec2Ins
+    tags:
+     - create
+
+  - name: terminate instance
+    ec2:
+     state: absent
+     instance_ids: ec2Ins.instance_ids
+     region: ap-south-1
+     aws_access_key: xxx
+     aws_secret_key: yyy
+    tags:
+     - terminate
+
