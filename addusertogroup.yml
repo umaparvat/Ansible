@@ -11,11 +11,21 @@
     shell: /usr/bin/getent passwd apache
     register: apache_check
 
+  - name: add apache to group nagcmd
+    user: 
+     name: apache
+     state: present
+     groups: nagcmd,apache
+     append: yes
+    when: (nagcmd_check.rc == "0") 
   - name: check for nagios user exists
     shell: /usr/bin/getent passwd nagios
     register: nagios_check
   - name: add nagios user to the group nagcmd
-    user: name = nagios groups = nagcmd
-    when: ' nagios_check.rc == 0 and nagcmd_check.rc == 0 '
+    user: 
+     name:  nagios 
+     group: nagcmd
+     append: yes
+    when: (nagios_check.rc == "0") and (nagcmd_check.rc == "0")
 
 
